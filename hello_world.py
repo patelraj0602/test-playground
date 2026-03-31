@@ -20,7 +20,7 @@ import argparse
 import sys
 
 
-def greet(name: str = "World") -> str:
+def generate_greeting(name: str = "World") -> str:
     """Return a personalised greeting string.
 
     Args:
@@ -33,9 +33,9 @@ def greet(name: str = "World") -> str:
         ValueError: If *name* is an empty string.
 
     Example:
-        >>> greet()
+        >>> generate_greeting()
         'Hello, World!'
-        >>> greet("Alice")
+        >>> generate_greeting("Alice")
         'Hello, Alice!'
     """
     if not name or not name.strip():
@@ -43,25 +43,25 @@ def greet(name: str = "World") -> str:
     return f"Hello, {name.strip()}!"
 
 
-def say_hello(name: str = "World") -> None:
+def print_greeting(name: str = "World") -> None:
     """Print a personalised greeting to stdout.
 
-    This is a thin wrapper around :func:`greet` that prints the result
-    rather than returning it — useful as a top-level helper.
+    This is a thin wrapper around :func:`generate_greeting` that prints
+    the result rather than returning it — useful as a top-level helper.
 
     Args:
         name: The name to greet. Defaults to ``"World"``.
 
     Example:
-        >>> say_hello()
+        >>> print_greeting()
         Hello, World!
-        >>> say_hello("Bob")
+        >>> print_greeting("Bob")
         Hello, Bob!
     """
-    print(greet(name))
+    print(generate_greeting(name))
 
 
-def _build_parser() -> argparse.ArgumentParser:
+def _create_argument_parser() -> argparse.ArgumentParser:
     """Build and return the CLI argument parser.
 
     Returns:
@@ -78,7 +78,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
+def run_cli(argv: list[str] | None = None) -> int:
     """Entry point for the hello-world CLI.
 
     Parses command-line arguments and prints a greeting.
@@ -91,15 +91,15 @@ def main(argv: list[str] | None = None) -> int:
         Exit code: ``0`` on success, ``1`` on error.
 
     Example:
-        >>> main(["--name", "World"])
+        >>> run_cli(["--name", "World"])
         Hello, World!
         0
     """
-    parser = _build_parser()
+    parser = _create_argument_parser()
     args = parser.parse_args(argv)
 
     try:
-        say_hello(args.name)
+        print_greeting(args.name)
     except ValueError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
@@ -108,4 +108,4 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_cli())
